@@ -6,6 +6,7 @@ const createElements=(arr)=>{
 const manageSpinner = (status) =>{
   if(status === true){
     document.getElementById('spinner').classList.remove('hidden');
+    document.getElementById('spinner').classList.add('flex');
     document.getElementById('word-container').classList.add('hidden');
 
   }
@@ -156,3 +157,18 @@ const displayLessons = (lessons) => {
 };
 
 loadLessons();
+
+document.getElementById('search-btn').addEventListener('click', function () {
+  removeActive();
+  const searchInput = document.getElementById('input-search');
+  const searchValue = searchInput.value.trim().toLowerCase();
+  // console.log(searchValue);
+  fetch('https://openapi.programming-hero.com/api/words/all')
+    .then(res => res.json())
+    .then(data => {
+      const allWords = data.data;
+      // console.log(allWords);
+      const filterWords = allWords.filter(word => word.word.toLowerCase().includes(searchValue));
+      displayLevelWord(filterWords);
+    });
+});
